@@ -1,0 +1,1 @@
+{"uuid":"bdc96c52-7b47-47d2-9267-14687be29a15","name":"Check that registration fails as expected when short password is passed","children":["c57e20c1-1869-466a-b591-716558d983ef"],"befores":[],"afters":[],"start":1724618181139,"stop":1724618182317}
