@@ -1,13 +1,15 @@
 package functionalities;
 
 import common.CommonTest;
+import model.CreateUserResponse;
 import org.junit.jupiter.api.*;
 import pages.LoginPage;
 import pages.PersonalAccountPage;
 import pages.RegisterPage;
 
+import static api.ApiClient.deleteUser;
 import static api.ApiClient.registerUser;
-import static data_providers.DataGenerator.*;
+import static providers.DataGenerator.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static util.Utils.MAIN_PAGE;
 
@@ -20,6 +22,7 @@ public class TransitionsTest extends CommonTest {
     private String email;
     private String password;
     private String name;
+    private String accessToken;
 
     @BeforeAll
     public void setUpBeforeAll() {
@@ -34,7 +37,8 @@ public class TransitionsTest extends CommonTest {
         password = generatePassword(8);
         name = generateName();
 
-        registerUser(email, password, name);
+        CreateUserResponse createUserResponse = registerUser(email, password, name);
+        accessToken = createUserResponse.getAccessToken();
 
         driver.get(MAIN_PAGE);
 
@@ -46,6 +50,7 @@ public class TransitionsTest extends CommonTest {
     @AfterEach
     public void cleanUpAfterEach() {
         personalAccountPage.clickLogoutButton();
+        deleteUser(accessToken);
     }
 
     @Test

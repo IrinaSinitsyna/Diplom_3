@@ -1,17 +1,16 @@
 package functionalities;
 
 import common.CommonTest;
-import data_providers.DataGenerator;
-import api.ApiClient;
+import model.CreateUserResponse;
 import org.junit.jupiter.api.*;
 import pages.LoginPage;
 import pages.PersonalAccountPage;
 import pages.RegisterPage;
 
+import static api.ApiClient.deleteUser;
 import static api.ApiClient.registerUser;
-import static data_providers.DataGenerator.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static providers.DataGenerator.*;
 import static util.Utils.MAIN_PAGE;
 
 public class LogoutTest extends CommonTest {
@@ -23,6 +22,7 @@ public class LogoutTest extends CommonTest {
     private String email;
     private String password;
     private String name;
+    private String accessToken;
 
     @BeforeAll
     public void setUpBeforeAll() {
@@ -37,13 +37,19 @@ public class LogoutTest extends CommonTest {
         password = generatePassword(8);
         name = generateName();
 
-        registerUser(email, password, name);
+        CreateUserResponse createUserResponse = registerUser(email, password, name);
+        accessToken = createUserResponse.getAccessToken();
 
         driver.get(MAIN_PAGE);
 
         registerPage.clickPersonalAccountButton();
         loginPage.enterCredentials(email, password);
         loginPage.clickLoginButton();
+    }
+
+    @AfterEach
+    public void cleanUpAfterEach() {
+        deleteUser(accessToken);
     }
 
     @Test

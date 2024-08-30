@@ -1,13 +1,16 @@
 package functionalities;
 
 import common.CommonTest;
-import org.junit.jupiter.api.*;
-import pages.PersonalAccountPage;
+import model.CreateUserResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import pages.RegisterPage;
-import data_providers.DataGenerator;
 
-import static data_providers.DataGenerator.*;
+import static api.ApiClient.deleteUser;
+import static api.ApiClient.login;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static providers.DataGenerator.*;
 import static util.Utils.MAIN_PAGE;
 
 public class RegistrationTest extends CommonTest {
@@ -37,6 +40,9 @@ public class RegistrationTest extends CommonTest {
 
         String headerText = registerPage.getHeaderText();
         assertEquals("Вход", headerText);
+
+        CreateUserResponse loginResponse = login(email, password);
+        deleteUser(loginResponse.getAccessToken());
     }
 
     @Test
