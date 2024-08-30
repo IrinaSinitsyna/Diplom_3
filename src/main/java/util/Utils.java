@@ -8,6 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Optional;
 
 public class Utils {
 
@@ -23,7 +24,9 @@ public class Utils {
             case YANDEX:
                 System.setProperty("webdriver.chrome.driver", "src/main/resources/yandexdriver");
                 ChromeOptions options = new ChromeOptions();
-                options.setBinary("/Applications/Yandex.app/Contents/MacOS/Yandex");
+                String yandexBinaries = Optional.ofNullable(System.getenv("yandex-browser-binaries"))
+                        .orElse("/Applications/Yandex.app/Contents/MacOS/Yandex");
+                options.setBinary(yandexBinaries);
                 return new ChromeDriver(options);
         }
         throw new IllegalStateException();
